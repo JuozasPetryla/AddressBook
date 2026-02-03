@@ -3,6 +3,12 @@
 
 #include "node.h"
 
-void llist_append(Node *node, void *data);
+typedef struct {
+    Node *head;
+    Node *tail;
+} LList;
+
+LList* llist_init();
+void llist_append(LList *llist, void *data);
 
 #endif
