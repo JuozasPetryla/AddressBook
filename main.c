@@ -21,8 +21,7 @@ void fillDashes();
 
 int main()
 {
-    
-    Node *head = create_node(NULL);
+    LList *llist = llist_init();
 
     Address *address1 = malloc(sizeof(Address));
     createAddress(address1);
@@ -33,11 +32,11 @@ int main()
     Address *address3 = malloc(sizeof(Address));
     createAddress(address3);
 
-    llist_append(head, address1);
-    llist_append(head, address2);
-    llist_append(head, address3);
+    llist_append(llist, address1);
+    llist_append(llist, address2);
+    llist_append(llist, address3);
 
-    displayAddresses(head->next);
+    displayAddresses(llist->head->next);
 
     return 0;
 }
