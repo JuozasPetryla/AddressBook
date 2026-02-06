@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "llist.h"
+
+// LINKED LIST METHODS
 
 extern void llist_prepend(LList *llist, void *data) 
 {
@@ -46,4 +49,36 @@ extern void llist_insert(LList *llist, void *data, int pos)
     }
 }
 
+// LINKED LIST ITERATOR
 
+extern LListIter* llist_iter_create(LList *llist)
+{
+    LListIter *llist_iter = (LListIter*)malloc(sizeof(LListIter));
+    if (!llist_iter) return NULL;
+
+    llist_iter->llist = llist;
+    llist_iter->curr = llist->head;
+
+    return llist_iter;
+}
+
+extern bool llist_iter_condition(LListIter *llist_iter) 
+{
+
+    return llist_iter->curr != NULL;
+}
+
+extern void* llist_iter_next(LListIter *llist_iter) 
+{
+    if (!llist_iter->curr) return NULL;
+
+    void *data = llist_iter->curr->data;
+    llist_iter->curr = llist_iter->curr->next;
+
+    return data;
+}
+
+extern void llist_iter_free(LListIter *llist_iter)
+{
+    free(llist_iter);
+}

@@ -7,7 +7,7 @@
 
 #define TABLE_WIDTH 103
 
-void displayAddresses(Node *node);
+void displayAddresses(LList *llist);
 
 void fillDashes();
 
@@ -25,13 +25,13 @@ int main()
 
     // addNewAddress(llist);
 
-    displayAddresses(llist->head);
+    displayAddresses(llist);
 
     // insertNewAddress(llist, 0);
     // insertNewAddress(llist, 9);
-    insertNewAddress(llist, 4);
+    // insertNewAddress(llist, 4);
 
-    displayAddresses(llist->head);
+    // displayAddresses(llist);
 
     return 0;
 }
@@ -93,23 +93,19 @@ void addNewAddress(LList *llist)
     llist_append(llist, address);
 }
 
-void displayAddresses(Node *node) 
+void displayAddresses(LList *llist) 
 {
     fillDashes();
     printf("| %20s | %20s | %35s | %15s |\n", "Name", "Surname", "Email", "Phone Number");
     fillDashes();
-    for (Node *curr = node; curr != NULL; curr = curr->next) {
-        Address *address = (Address*)curr->data;
 
-        if (address == NULL) continue;
-
-        printf("| %20s | %20s | %35s | %15s |\n", 
-            address->name,
-            address->surname,
-            address->email,
-            address->phone_number
-        );
+    LListIter *iter = llist_iter_create(llist);
+    while (llist_iter_condition(iter)) {
+        Address *address = (Address*) llist_iter_next(iter);
+        printf("| %20s | %20s | %35s | %15s |\n", address->name, address->surname, address->email, address->phone_number);
     }
+    llist_iter_free(iter);
+
     fillDashes();
 }
 
