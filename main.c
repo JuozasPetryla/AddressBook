@@ -2,64 +2,108 @@
 #include <stdlib.h>
 #include <string.h>
 #include "llist.h"
+#include "address.h"
+#include "util.h"
 
-int CNT = 10;
-
-typedef struct
-{
-    char name[20];
-    char surname[20];
-    char email[30];
-    char phone_number[30];
-} Address;
+#define TABLE_WIDTH 103
 
 void displayAddresses(Node *node);
 
-void createAddress(Address *address);
-
 void fillDashes();
+
+void read_address_csv(const char *filename, LList *llist);
+
+void addNewAddress(LList *llist);
+
+void insertNewAddress(LList *llist, int pos);
 
 int main()
 {
-    LList *llist = llist_init();
+    LList *llist = (LList*) malloc(sizeof(LList));
 
-    Address *address1 = malloc(sizeof(Address));
-    createAddress(address1);
+    read_address_csv("./addresses.csv", llist);
 
-    Address *address2 = malloc(sizeof(Address));
-    createAddress(address2);
+    // addNewAddress(llist);
 
-    Address *address3 = malloc(sizeof(Address));
-    createAddress(address3);
+    displayAddresses(llist->head);
 
-    llist_append(llist, address1);
-    llist_append(llist, address2);
-    llist_append(llist, address3);
+    // insertNewAddress(llist, 0);
+    // insertNewAddress(llist, 9);
+    insertNewAddress(llist, 4);
 
-    displayAddresses(llist->head->next);
+    displayAddresses(llist->head);
 
     return 0;
 }
 
-void createAddress(Address *address)
+void read_address_csv(const char *filename, LList *llist) 
 {
-    strcpy(address->name, "Juozas");
-    strcpy(address->surname, "Petryla");
-    strcpy(address->email, "itsgrtjuozas@gmail.com");
-    strcpy(address->phone_number, "+37065327044");
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL)
+    {
+        printf("Error opening file\n");
+        return;
+    }
+
+    char line[1024];
+
+    fgets(line, sizeof line, fp);
+
+    while (fgets(line, sizeof(line), fp)) {
+        line[strcspn(line, "\r\n")] = '\0';
+
+        char *name = strtok(line, ",");
+        char *surname = strtok(NULL, ",");
+        char *email = strtok(NULL, ",");
+        char *phone_number = strtok(NULL, ",");
+
+        Address *address = createAddress(name, surname, email, phone_number);
+
+        llist_append(llist, address);
+    }
+
+    fclose(fp);
+}
+
+void insertNewAddress(LList *llist, int pos)
+{
+    printf("Enter address\n");
+
+    char *name = read_string_console("name");
+    char *surname = read_string_console("surname");
+    char *email = read_string_console("email");
+    char *phone_number = read_string_console("phone number");
+
+    Address *address = createAddress(name, surname, email, phone_number);
+
+    llist_insert(llist, address, pos);
+}
+
+void addNewAddress(LList *llist)
+{
+    printf("Enter address\n");
+
+    char *name = read_string_console("name");
+    char *surname = read_string_console("surname");
+    char *email = read_string_console("email");
+    char *phone_number = read_string_console("phone number");
+
+    Address *address = createAddress(name, surname, email, phone_number);
+
+    llist_append(llist, address);
 }
 
 void displayAddresses(Node *node) 
 {
-    printf("| %20s | %20s | %30s | %30s |\n", "Name", "Surname", "Email", "Phone Number");
     fillDashes();
-    for (Node *curr = node; curr != NULL; curr = curr->next)
-    {
+    printf("| %20s | %20s | %35s | %15s |\n", "Name", "Surname", "Email", "Phone Number");
+    fillDashes();
+    for (Node *curr = node; curr != NULL; curr = curr->next) {
         Address *address = (Address*)curr->data;
 
         if (address == NULL) continue;
 
-        printf("| %20s | %20s | %30s | %30s |\n", 
+        printf("| %20s | %20s | %35s | %15s |\n", 
             address->name,
             address->surname,
             address->email,
@@ -70,9 +114,7 @@ void displayAddresses(Node *node)
 }
 
 void fillDashes() {
-    int count = sizeof(Address) + 13;
-    for (int i = 0; i < count; ++i) 
-    {
+    for (int i = 0; i < TABLE_WIDTH; ++i) {
         printf("-");
     }
     printf("\n");
