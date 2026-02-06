@@ -2,11 +2,13 @@
 #define LLIST_H
 
 #include <stdbool.h>
+#include <stdlib.h>
 #include "node.h"
 
 typedef struct {
     Node *head;
     Node *tail;
+    size_t size;
 } LList;
 
 typedef struct {
@@ -17,6 +19,8 @@ typedef struct {
 void llist_prepend(LList *llist, void *data);
 void llist_append(LList *llist, void *data);
 void llist_insert(LList *llist, void *data, int pos);
+void* llist_find_pos(LList *llist, int pos);
+void* llist_find_str(LList *llist, const char* str);
 
 LListIter* llist_iter_create(LList *llist);
 bool llist_iter_condition(LListIter *llist_iter);

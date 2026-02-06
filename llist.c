@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "util.h"
 #include "llist.h"
 
 // LINKED LIST METHODS
@@ -16,6 +17,8 @@ extern void llist_prepend(LList *llist, void *data)
         node->next = llist->head;
         llist->head = node;
     }
+
+    llist->size++;
 }
 
 extern void llist_append(LList *llist, void *data)
@@ -29,6 +32,8 @@ extern void llist_append(LList *llist, void *data)
         llist->tail->next = node;
         llist->tail = node;
     }
+
+    llist->size++;
 }
 
 extern void llist_insert(LList *llist, void *data, int pos)
@@ -46,7 +51,34 @@ extern void llist_insert(LList *llist, void *data, int pos)
         Node *node = create_node(data);
         node->next = curr->next;
         curr->next = node;
+
+        llist->size++;
     }
+}
+
+extern void* llist_find_pos(LList *llist, int pos) 
+{
+    if (pos >= (int)llist->size) {
+        return NULL;
+    } else {
+        Node *curr = llist->head;
+        for (int i = 0; i < pos; ++i) {
+            curr = curr->next;
+        }
+        return curr->data;
+    }
+}
+
+extern void* llist_find_str(LList *llist, const char* input_str)
+{
+    Node *curr = llist->head;
+    while (curr != NULL) {
+        if (contains(curr->data, input_str)) {
+            return curr->data;
+        }
+        curr = curr->next;
+    }
+    return NULL;
 }
 
 // LINKED LIST ITERATOR
