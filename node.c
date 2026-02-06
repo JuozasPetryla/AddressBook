@@ -3,7 +3,7 @@
 
 Node* create_node(void *data) 
 {
-    Node *node = malloc(sizeof(Node));
+    Node *node = (Node*)malloc(sizeof(Node));
 
     node->next = NULL;
     node->data = data;

@@ -8,7 +8,8 @@ typedef struct {
     Node *tail;
 } LList;
 
-LList* llist_init();
+void llist_prepend(LList *llist, void *data);
 void llist_append(LList *llist, void *data);
+void llist_insert(LList *llist, void *data, int pos);
 
 #endif
