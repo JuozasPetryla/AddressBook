@@ -135,6 +135,7 @@ extern bool llist_remove_all(LList *llist)
     }
     llist->head = NULL;
     llist->tail = NULL;
+    llist->size = 0;
 
     return true;
 }
