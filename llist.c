@@ -36,9 +36,9 @@ extern void llist_append(LList *llist, void *data)
     llist->size++;
 }
 
-extern void llist_insert(LList *llist, void *data, int pos)
+extern bool llist_insert(LList *llist, void *data, int pos)
 {
-    if (pos >= (int)llist->size || pos < 0) return;
+    if (pos >= (int)llist->size || pos < 0) return false;
 
     Node *curr = llist->head;
     for (int i = 0; i < pos - 1; ++i) {
@@ -56,6 +56,8 @@ extern void llist_insert(LList *llist, void *data, int pos)
 
         llist->size++;
     }
+
+    return true;
 }
 
 extern void* llist_find_pos(LList *llist, int pos) 
@@ -117,26 +119,24 @@ extern void* llist_remove(LList *llist, int pos)
     return data;
 }
 
-extern void llist_remove_all(LList *llist)
+extern bool llist_remove_all(LList *llist)
 {
-    if (llist->head == NULL && llist->tail == NULL) return;
+    if (llist->head == NULL) return false;
 
     Node *curr = llist->head;
     while(curr) {
         Node *next = curr->next;
-        if (curr == llist->head && curr == llist->tail) {
-            llist->head = NULL;
-            llist->tail = NULL;
-        } else {
-            llist->head = next;    
-        }
 
-        llist->size--;
-
+        destroy(curr->data);
         free(curr);
-        
+
+        curr = NULL;
         curr = next;
     }
+    llist->head = NULL;
+    llist->tail = NULL;
+
+    return true;
 }
 
 // LINKED LIST ITERATOR
