@@ -22,13 +22,18 @@ extern char* read_input_str(const char *msg)
 extern int read_input_int(const char *msg)
 {
     int number;
-    
-    printf("%s\n", msg);
-    if (scanf("%d", &number) != 1) {
-        printf("Invalid input! Please enter a valid integer.\n");
-    }   
+    int c;
 
-    return number;
+    while (1) {
+        printf("%s\n", msg);
+
+        if (scanf("%d", &number) == 1)
+            return number;
+
+        printf("Invalid input! Please enter a valid integer.\n");
+
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 }
 
 extern void read_csv_to_list(const char *filename, LList *llist)
