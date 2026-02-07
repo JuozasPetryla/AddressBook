@@ -97,16 +97,18 @@ void perform_selected_action(action action)
     }
 }
 
+// TODO: fix insert head and tail
 void insert_address()
 {
-    int pos;
-
-    printf("Input address insertion position:");
-    scanf("%d", &pos);
+    int pos = read_input_int("Input address insertion position:");
 
     Address *address = _read_address_from_input();
 
-    llist_insert(llist, address, pos);
+    bool result = llist_insert(llist, address, pos);
+    if (!result) {
+        printf("Invalid insert position of %d\n", pos);
+    }
+    printf("Inserted address to book position %d\n", pos);
 }
 
 void append_address()
@@ -114,6 +116,7 @@ void append_address()
     Address *address = _read_address_from_input();
 
     llist_append(llist, address);
+    printf("Appended address to the end of the book\n");
 }
 
 void display_all_addresses() 
@@ -134,45 +137,38 @@ void display_all_addresses()
 
 void find_address_by_pos() 
 {
-    int pos;
-
-    printf("Input position for the address to be found:");
-    scanf("%d", &pos);
+    int pos = read_input_int("Input position for the address to be found:");
 
     Address *address = (Address*)llist_find_pos(llist, pos);
-    printf("Searching for address at position %d\n", pos);
     _display_address_safe(address, "Could not find address");
 }
 
 void find_address_by_str() 
 {
-    char str[128];
-
-    printf("Input string to search the address by:");
-    scanf("%s", str);
+    char *str = read_input_str("Input string to search the address by:");
 
     Address *address = (Address*)llist_find_str(llist, str);
-
-    printf("Searching for address with matching string '%s'\n", str);
+    free(str);
     _display_address_safe(address, "Could not find address");
 }
 
 void remove_address()
 {
-    int pos;
-
-    printf("Input address to remove position:");
-    scanf("%d", &pos);
+    int pos = read_input_int("Input address to remove position:");
 
     Address *address = (Address*)llist_remove(llist, pos);
-    printf("Removing for address at position %d\n", pos);
     _display_address_safe(address, "Could not remove address");
+    
+    destroy(address);
 }
 
 void remove_all_addresses()
 {
-    printf("Removing all addresses from address book\n");
-    llist_remove_all(llist);
+    bool result = llist_remove_all(llist);
+    if (!result) {
+        printf("Book is already empty\n");
+    }
+    printf("Successfully removed all addresses from the book\n");
 }
 
 void _show_action_types()
@@ -201,12 +197,12 @@ Address* _read_address_from_input()
 {
     printf("Enter address\n");
 
-    char *name = read_string_console("name");
-    char *surname = read_string_console("surname");
-    char *email = read_string_console("email");
-    char *phone_number = read_string_console("phone number");
+    char *name = read_input_str("Input name:");
+    char *surname = read_input_str("Input surname:");
+    char *email = read_input_str("Input email:");
+    char *phone_number = read_input_str("Input phone number:");
 
-    return create_address(name, surname, email, phone_number);
+    return address_create(name, surname, email, phone_number);
 }
 
 void _display_address_safe(Address *address, const char *err_msg)

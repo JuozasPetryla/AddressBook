@@ -9,11 +9,13 @@ typedef struct
     char *phone_number;
 } Address;
 
-Address* create_address(
+Address* address_create(
     const char *name,
     const char *surname,
     const char *email,
     const char *phone_number
 );
+
+void address_destroy(Address *address);
 
 #endif

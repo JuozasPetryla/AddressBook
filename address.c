@@ -4,7 +4,7 @@
 #include "util.h"
 #include "address.h"
 
-Address* create_address(
+Address* address_create(
     const char *name,
     const char *surname,
     const char *email,
@@ -26,6 +26,19 @@ Address* create_address(
     return address;
 }
 
+void destroy(void *data)
+{
+    Address *address = (Address*) data;
+
+    if (address == NULL) return;
+
+    free(address->name);
+    free(address->surname);
+    free(address->email);
+    free(address->phone_number);
+    free(address);
+}
+
 bool contains(void *data, const char *input_str)
 {
     Address *address = (Address*)data;
@@ -45,5 +58,5 @@ void* parse_line(char line[])
     char *email = strtok(NULL, ",");
     char *phone_number = strtok(NULL, ",");
 
-    return create_address(name, surname, email, phone_number);
+    return address_create(name, surname, email, phone_number);
 }

@@ -4,11 +4,11 @@
 #include <stdbool.h>
 #include "util.h"
 
-extern char* read_string_console(const char *input_type) 
+extern char* read_input_str(const char *msg) 
 {
     char buf[128];
 
-    printf("\nInput %s:\n", input_type);
+    printf("%s\n", msg);
     scanf("%s", buf);
 
     size_t len = strlen(buf);
@@ -17,6 +17,18 @@ extern char* read_string_console(const char *input_type)
     memcpy(str, buf, len + 1);
 
     return str;
+}
+
+extern int read_input_int(const char *msg)
+{
+    int number;
+    
+    printf("%s\n", msg);
+    if (scanf("%d", &number) != 1) {
+        printf("Invalid input! Please enter a valid integer.\n");
+    }   
+
+    return number;
 }
 
 extern void read_csv_to_list(const char *filename, LList *llist)

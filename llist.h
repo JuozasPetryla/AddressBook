@@ -18,10 +18,10 @@ typedef struct {
 
 
 // LINKED LIST METHODS
-void llist_remove_all(LList *llist);
+bool llist_remove_all(LList *llist);
 void llist_prepend(LList *llist, void *data);
 void llist_append(LList *llist, void *data);
-void llist_insert(LList *llist, void *data, int pos);
+bool llist_insert(LList *llist, void *data, int pos);
 void* llist_remove(LList *llist, int pos);
 void* llist_find_pos(LList *llist, int pos);
 void* llist_find_str(LList *llist, const char* str);
