@@ -20,15 +20,15 @@ typedef enum {
     REMOVE_ALL,
     FIND_BY_POS,
     FIND_BY_STR
-} action;
+} Action;
 
 void _display_address_safe(Address *address, const char *err_msg);
 
 Address* _read_address_from_input();
 
-void _handle_default_action(action action);
+void _handle_default_action(Action action);
 
-void perform_selected_action(action action);
+void perform_selected_action(Action action);
 
 void display_all_addresses();
 
@@ -50,20 +50,18 @@ int main()
 
     read_csv_to_list("./addresses.csv", llist);
 
-    action action = DEFAULT;
+    Action action = DEFAULT;
     
     perform_selected_action(action);
     while(true) {
-        printf("Choose an action: ");
-        scanf("%d", &action);
-
+        action = (Action)read_input_int("Choose an action: ");
         perform_selected_action(action);
     }
 
     return 0;
 }
 
-void perform_selected_action(action action)
+void perform_selected_action(Action action)
 {
     system("clear");
 
@@ -189,7 +187,7 @@ void _show_action_types()
     fill_symbols(ADDRESS_BOOK_WIDTH, '*');
 }
 
-void _handle_default_action(action action)
+void _handle_default_action(Action action)
 {
     if (DEFAULT != action) {
         printf("| %-99s |\n", "Invalid action type, please select a valid action:");
