@@ -24,7 +24,7 @@ extern void llist_prepend(LList *llist, void *data)
 extern void llist_append(LList *llist, void *data)
 {
     Node *node = create_node(data);
-
+    
     if (llist->head == NULL && llist->tail == NULL) {
         llist->head = node;
         llist->tail = node;
@@ -40,8 +40,10 @@ extern bool llist_insert(LList *llist, void *data, int pos)
 {
     if (pos >= (int)llist->size || pos < 0) return false;
 
+    Node *prev = NULL;
     Node *curr = llist->head;
-    for (int i = 0; i < pos - 1; ++i) {
+    for (int i = 0; i < pos; ++i) {
+        prev = curr;
         curr = curr->next;
     }
     
@@ -51,8 +53,8 @@ extern bool llist_insert(LList *llist, void *data, int pos)
         llist_prepend(llist, data);
     } else {
         Node *node = create_node(data); 
-        node->next = curr->next;
-        curr->next = node;
+        node->next = curr;
+        prev->next = node;
 
         llist->size++;
     }
