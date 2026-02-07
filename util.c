@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "util.h"
 
 extern char* read_string_console(const char *input_type) 
 {
@@ -18,6 +19,37 @@ extern char* read_string_console(const char *input_type)
     return str;
 }
 
+extern void read_csv_to_list(const char *filename, LList *llist)
+{
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL)
+    {
+        printf("Error opening file\n");
+        return;
+    }
+
+    char line[1024];
+
+    fgets(line, sizeof line, fp);
+
+    while (fgets(line, sizeof(line), fp)) {
+        line[strcspn(line, "\r\n")] = '\0';
+
+        void *parsed_line = parse_line(line);
+
+        llist_append(llist, parsed_line);
+    }
+
+    fclose(fp);
+}
+
 extern bool string_contains(const char *target_str, const char *input_str) {
     return strstr(target_str, input_str) != NULL;
+}
+
+extern void fill_symbols(int table_width, char symbol) {
+    for (int i = 0; i < table_width; ++i) {
+        printf("%c", symbol);
+    }
+    printf("\n");
 }

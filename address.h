@@ -9,7 +9,7 @@ typedef struct
     char *phone_number;
 } Address;
 
-Address* createAddress(
+Address* create_address(
     const char *name,
     const char *surname,
     const char *email,
