@@ -16,12 +16,17 @@ typedef struct {
     Node *curr;
 } LListIter;
 
+
+// LINKED LIST METHODS
+void llist_remove_all(LList *llist);
 void llist_prepend(LList *llist, void *data);
 void llist_append(LList *llist, void *data);
 void llist_insert(LList *llist, void *data, int pos);
+void* llist_remove(LList *llist, int pos);
 void* llist_find_pos(LList *llist, int pos);
 void* llist_find_str(LList *llist, const char* str);
 
+// LINKED LIST ITERATOR METHODS
 LListIter* llist_iter_create(LList *llist);
 bool llist_iter_condition(LListIter *llist_iter);
 void* llist_iter_next(LListIter *llist_iter);
