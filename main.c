@@ -70,7 +70,7 @@ void perform_selected_action(action action)
     fill_symbols(ADDRESS_BOOK_WIDTH, '*');
     printf("| %-99s |\n", "Address Book management program");
     printf("| %-s%-74d |\n", "Records in address book: ", (int)llist->size);
-    fill_symbols(ADDRESS_BOOK_WIDTH, '*');
+    fill_symbols(ADDRESS_BOOK_WIDTH, '*');  
 
     switch (action)
     {
@@ -101,18 +101,17 @@ void perform_selected_action(action action)
     }
 }
 
-// TODO: fix insert head and tail
 void insert_address()
 {
     int pos = read_input_int("Input address insertion position:");
 
     Address *address = _read_address_from_input();
-
     bool result = llist_insert(llist, address, pos);
     if (!result) {
         printf("Invalid insert position of %d\n", pos);
+    } else {
+        printf("Inserted address to book position %d\n", pos);
     }
-    printf("Inserted address to book position %d\n", pos);
 }
 
 void append_address()
@@ -171,8 +170,9 @@ void remove_all_addresses()
     bool result = llist_remove_all(llist);
     if (!result) {
         printf("Book is already empty\n");
+    } else {
+        printf("Successfully removed all addresses from the book\n");
     }
-    printf("Successfully removed all addresses from the book\n");
 }
 
 void _show_action_types()
@@ -192,7 +192,7 @@ void _show_action_types()
 void _handle_default_action(action action)
 {
     if (DEFAULT != action) {
-        printf("Invalid action type, please select a valid action:\n");
+        printf("| %-99s |\n", "Invalid action type, please select a valid action:");
     }
     _show_action_types();
 }
