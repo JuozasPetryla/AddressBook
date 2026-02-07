@@ -38,6 +38,8 @@ extern void llist_append(LList *llist, void *data)
 
 extern void llist_insert(LList *llist, void *data, int pos)
 {
+    if (pos >= (int)llist->size || pos < 0) return;
+
     Node *curr = llist->head;
     for (int i = 0; i < pos - 1; ++i) {
         curr = curr->next;
@@ -48,7 +50,7 @@ extern void llist_insert(LList *llist, void *data, int pos)
     } else if (curr == llist->head) {
         llist_prepend(llist, data);
     } else {
-        Node *node = create_node(data);
+        Node *node = create_node(data); 
         node->next = curr->next;
         curr->next = node;
 
@@ -58,15 +60,13 @@ extern void llist_insert(LList *llist, void *data, int pos)
 
 extern void* llist_find_pos(LList *llist, int pos) 
 {
-    if (pos >= (int)llist->size) {
-        return NULL;
-    } else {
-        Node *curr = llist->head;
-        for (int i = 0; i < pos; ++i) {
-            curr = curr->next;
-        }
-        return curr->data;
+    if (pos >= (int)llist->size || pos < 0) return NULL;
+
+    Node *curr = llist->head;
+    for (int i = 0; i < pos; ++i) {
+        curr = curr->next;
     }
+    return curr->data;
 }
 
 extern void* llist_find_str(LList *llist, const char* input_str)
@@ -79,6 +79,64 @@ extern void* llist_find_str(LList *llist, const char* input_str)
         curr = curr->next;
     }
     return NULL;
+}
+
+extern void* llist_remove(LList *llist, int pos) 
+{
+    if (pos >= (int)llist->size || pos < 0) return NULL;
+
+    Node *prev = NULL;
+    Node *curr = llist->head;
+    for (int i = 0; i < pos; ++i) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    void *data = curr->data;
+
+    if (curr == llist->head && curr == llist->tail) {
+        llist->head = NULL;
+        llist->tail = NULL;
+    } else {
+        if (curr == llist->head) {
+            llist->head = llist->head->next;
+        } else if (curr == llist->tail) {
+            llist->tail = prev;
+            llist->tail->next = NULL;
+        } else {
+            prev->next = curr->next;
+        }
+    }
+
+
+    llist->size--;
+    
+    free(curr);
+    curr = NULL;
+
+    return data;
+}
+
+extern void llist_remove_all(LList *llist)
+{
+    if (llist->head == NULL && llist->tail == NULL) return;
+
+    Node *curr = llist->head;
+    while(curr) {
+        Node *next = curr->next;
+        if (curr == llist->head && curr == llist->tail) {
+            llist->head = NULL;
+            llist->tail = NULL;
+        } else {
+            llist->head = next;    
+        }
+
+        llist->size--;
+
+        free(curr);
+        
+        curr = next;
+    }
 }
 
 // LINKED LIST ITERATOR

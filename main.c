@@ -21,6 +21,10 @@ void find_address_by_pos(LList *llist, int pos);
 
 void find_address_by_str(LList *llist, char *str);
 
+void remove_address_by_pos(LList *llist, int pos);
+
+void remove_all_addresses(LList *llist);
+
 int main()
 {
     LList *llist = (LList*) malloc(sizeof(LList));
@@ -39,10 +43,19 @@ int main()
     // find_address_by_pos(llist, 9);
     // find_address_by_pos(llist, 5);
 
-    find_address_by_str(llist, "Lukas");
-    find_address_by_str(llist, "Monika");
-    find_address_by_str(llist, "6901");
+    // find_address_by_str(llist, "Lukas");
+    // find_address_by_str(llist, "Monika");
+    // find_address_by_str(llist, "6901");
 
+    remove_address_by_pos(llist, 9);
+    display_addresses(llist);
+    remove_address_by_pos(llist, 0);
+    display_addresses(llist);
+    remove_address_by_pos(llist, 5);
+
+    // remove_all_addresses(llist);
+
+    display_addresses(llist);
     // display_addresses(llist);
 
     return 0;
@@ -145,6 +158,25 @@ void find_address_by_str(LList *llist, char *str)
     } else {
         printf("Could not find address\n");
     }
+}
+
+void remove_address_by_pos(LList *llist, int pos)
+{
+    Address *address = (Address*)llist_remove(llist, pos);
+    printf("Removing for address at position %d\n", pos);
+    if (address != NULL) {
+        fill_dashes();
+        printf("| %20s | %20s | %35s | %15s |\n", address->name, address->surname, address->email, address->phone_number);
+        fill_dashes();
+    } else {
+        printf("Could not remove address\n");
+    }
+}
+
+void remove_all_addresses(LList *llist)
+{
+    printf("Removing all addresses from address book\n");
+    llist_remove_all(llist);
 }
 
 void fill_dashes() {
