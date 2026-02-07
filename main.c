@@ -8,7 +8,6 @@
 #include "util.h"
 
 #define ADDRESS_BOOK_WIDTH 103
-#define INTERFACE_MENU_WIDTH 79
 
 LList *llist;
 
@@ -48,19 +47,17 @@ void remove_all_addresses();
 int main()
 {
     llist = (LList*) malloc(sizeof(LList));
+
     read_csv_to_list("./addresses.csv", llist);
 
     action action = DEFAULT;
     
-    fill_symbols(INTERFACE_MENU_WIDTH, '*');
-    printf("| %-75s |\n", "Welcome to the Address Book program!");
-    fill_symbols(INTERFACE_MENU_WIDTH, '*');
-
+    perform_selected_action(action);
     while(true) {
-        perform_selected_action(action);
-        
         printf("Choose an action: ");
         scanf("%d", &action);
+
+        perform_selected_action(action);
     }
 
     return 0;
@@ -68,6 +65,13 @@ int main()
 
 void perform_selected_action(action action)
 {
+    system("clear");
+
+    fill_symbols(ADDRESS_BOOK_WIDTH, '*');
+    printf("| %-99s |\n", "Address Book management program");
+    printf("| %-s%-74d |\n", "Records in address book: ", (int)llist->size);
+    fill_symbols(ADDRESS_BOOK_WIDTH, '*');
+
     switch (action)
     {
     case DISPLAY_ALL:
@@ -158,7 +162,7 @@ void remove_address()
 
     Address *address = (Address*)llist_remove(llist, pos);
     _display_address_safe(address, "Could not remove address");
-    
+
     destroy(address);
 }
 
@@ -173,16 +177,16 @@ void remove_all_addresses()
 
 void _show_action_types()
 {
-    fill_symbols(INTERFACE_MENU_WIDTH, '*');
-    printf("| %-75s |\n", "0: Show available action types");
-    printf("| %-75s |\n", "1: Display all addresses");
-    printf("| %-75s |\n", "2: Append a new address to the book");
-    printf("| %-75s |\n", "3: Insert a new address in the selected position");
-    printf("| %-75s |\n", "4: Remove an address from the selected position the book");
-    printf("| %-75s |\n", "5: Remove all addresses from the book");
-    printf("| %-75s |\n", "6: Find an address in the selected position in the book");
-    printf("| %-75s |\n", "7: Find an address by the first matching string in the book");
-    fill_symbols(INTERFACE_MENU_WIDTH, '*');
+    fill_symbols(ADDRESS_BOOK_WIDTH, '*');
+    printf("| %-99s |\n", "0: Show available action types");
+    printf("| %-99s |\n", "1: Display all addresses");
+    printf("| %-99s |\n", "2: Append a new address to the book");
+    printf("| %-99s |\n", "3: Insert a new address in the selected position");
+    printf("| %-99s |\n", "4: Remove an address from the selected position the book");
+    printf("| %-99s |\n", "5: Remove all addresses from the book");
+    printf("| %-99s |\n", "6: Find an address in the selected position in the book");
+    printf("| %-99s |\n", "7: Find an address by the first matching string in the book");
+    fill_symbols(ADDRESS_BOOK_WIDTH, '*');
 }
 
 void _handle_default_action(action action)

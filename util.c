@@ -36,7 +36,7 @@ extern void read_csv_to_list(const char *filename, LList *llist)
     FILE *fp = fopen(filename, "r");
     if (fp == NULL)
     {
-        printf("Error opening file\n");
+        printf("Could not open file %s\n", filename);
         return;
     }
 
