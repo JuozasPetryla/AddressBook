@@ -68,6 +68,7 @@ int main()
         perform_selected_action(action);
         action = (Action)read_input_int("Choose an action: ");
     }
+    
 
     _cleanup();
 
