@@ -5,9 +5,11 @@
 #include "util.h"
 #include "shared.h"
 
+#define MAX_LEN 128
+
 extern char* read_input_str(const char *msg) 
 {
-    char buf[128];
+    char buf[MAX_LEN];
 
     printf("%s\n", msg);
     scanf("%s", buf);

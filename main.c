@@ -3,6 +3,7 @@
 #include <string.h>
 #include <syscall.h>
 #include <stdbool.h>
+#include <signal.h>
 #include "llist.h"
 #include "address.h"
 #include "util.h"
@@ -30,6 +31,12 @@ Address* _read_address_from_input();
 
 void _handle_default_action(Action action);
 
+void _clear_screen();
+
+void _handle_sigint(int sig);
+
+void _cleanup();
+
 void perform_selected_action(Action action);
 
 void display_all_addresses();
@@ -48,8 +55,10 @@ void remove_all_addresses();
 
 int main()
 {
+    signal(SIGINT, _handle_sigint);
+
     llist = (LList*)malloc(sizeof(LList));
-    // llist_init(llist);
+    llist_init(llist);
 
     read_csv_to_list("./addresses.csv", llist);
 
@@ -60,15 +69,14 @@ int main()
         action = (Action)read_input_int("Choose an action: ");
     }
 
-    llist_remove_all(llist);
-    free(llist);
+    _cleanup();
 
-    return 0;
+    exit(0);
 }
 
 void perform_selected_action(Action action)
 {
-    system("clear");
+    _clear_screen();
 
     fill_symbols(ADDRESS_BOOK_WIDTH, '*');
     printf("| %-99s |\n", "Address Book management program");
@@ -228,5 +236,30 @@ void _display_address_safe(Address *address, const char *err_msg)
         fill_symbols(ADDRESS_BOOK_WIDTH, '-');
     } else {
         printf("%s\n", err_msg);
+    }
+}
+
+void _clear_screen()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    printf("\033[2J\033[H");
+    fflush(stdout);
+#endif
+}
+
+void _handle_sigint(int sig)
+{
+    _cleanup();
+    exit(0);
+}
+
+void _cleanup()
+{
+    if (llist) {
+        llist_remove_all(llist);
+        free(llist);
+        llist = NULL;
     }
 }
