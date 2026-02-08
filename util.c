@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "util.h"
+#include "shared.h"
 
 extern char* read_input_str(const char *msg) 
 {

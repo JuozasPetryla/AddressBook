@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "util.h"
 #include "llist.h"
+#include "shared.h"
 
 // LINKED LIST METHODS
 

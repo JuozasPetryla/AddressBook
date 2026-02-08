@@ -6,6 +6,7 @@
 #include "llist.h"
 #include "address.h"
 #include "util.h"
+#include "shared.h"
 
 #define ADDRESS_BOOK_WIDTH 103
 

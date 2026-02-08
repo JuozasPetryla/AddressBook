@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "util.h"
 #include "address.h"
+#include "shared.h"
+#include "util.h"
 
 Address* address_create(
     const char *name,
