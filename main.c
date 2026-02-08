@@ -68,7 +68,7 @@ int main()
         perform_selected_action(action);
         action = (Action)read_input_int("Choose an action: ");
     }
-    
+
 
     _cleanup();
 
@@ -250,7 +250,7 @@ void _clear_screen()
 #endif
 }
 
-void _handle_sigint(int sig)
+void _handle_sigint(int)
 {
     _cleanup();
     exit(0);

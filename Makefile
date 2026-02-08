@@ -1,23 +1,23 @@
-bin/main: build/main.o build/llist.o build/node.o build/address.o build/util.o | bin
-	gcc build/main.o build/llist.o build/node.o build/address.o build/util.o -o bin/main
+CC := gcc
+CFLAGS := -Wall -Wextra
 
-build/main.o: main.c | build
-	gcc -c main.c -o build/main.o
+OBJDIR := build
+BINDIR := bin
 
-build/llist.o: llist.c | build
-	gcc -c llist.c -o build/llist.o
+OBJS := $(OBJDIR)/main.o \
+        $(OBJDIR)/llist.o \
+        $(OBJDIR)/node.o \
+        $(OBJDIR)/address.o \
+        $(OBJDIR)/util.o
 
-build/node.o: node.c | build
-	gcc -c node.c -o build/node.o
+$(BINDIR)/main: $(OBJS) | $(BINDIR)
+	$(CC) $(OBJS) -o $@
 
-build/address.o: address.c | build
-	gcc -c address.c -o build/address.o
+$(OBJDIR)/%.o: %.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-build/util.o: util.c | build
-	gcc -c util.c -o build/util.o
+$(BINDIR):
+	mkdir -p $(BINDIR)
 
-bin:
-	mkdir -p bin
-
-build:
-	mkdir -p build
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
