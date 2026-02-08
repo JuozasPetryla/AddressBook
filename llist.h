@@ -18,6 +18,7 @@ typedef struct {
 
 
 // LINKED LIST METHODS
+void llist_init(LList *llist);
 bool llist_remove_all(LList *llist);
 void llist_prepend(LList *llist, void *data);
 void llist_append(LList *llist, void *data);

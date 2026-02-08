@@ -20,7 +20,8 @@ typedef enum {
     REMOVE,
     REMOVE_ALL,
     FIND_BY_POS,
-    FIND_BY_STR
+    FIND_BY_STR,
+    EXIT
 } Action;
 
 void _display_address_safe(Address *address, const char *err_msg);
@@ -47,17 +48,20 @@ void remove_all_addresses();
 
 int main()
 {
-    llist = (LList*) malloc(sizeof(LList));
+    llist = (LList*)malloc(sizeof(LList));
+    // llist_init(llist);
 
     read_csv_to_list("./addresses.csv", llist);
 
     Action action = DEFAULT;
     
-    perform_selected_action(action);
-    while(true) {
-        action = (Action)read_input_int("Choose an action: ");
+    while(action != EXIT) {
         perform_selected_action(action);
+        action = (Action)read_input_int("Choose an action: ");
     }
+
+    llist_remove_all(llist);
+    free(llist);
 
     return 0;
 }
@@ -185,6 +189,7 @@ void _show_action_types()
     printf("| %-99s |\n", "5: Remove all addresses from the book");
     printf("| %-99s |\n", "6: Find an address in the selected position in the book");
     printf("| %-99s |\n", "7: Find an address by the first matching string in the book");
+    printf("| %-99s |\n", "8: Exit program");
     fill_symbols(ADDRESS_BOOK_WIDTH, '*');
 }
 
@@ -205,7 +210,14 @@ Address* _read_address_from_input()
     char *email = read_input_str("Input email:");
     char *phone_number = read_input_str("Input phone number:");
 
-    return address_create(name, surname, email, phone_number);
+    Address *address = address_create(name, surname, email, phone_number);
+    
+    free(name);
+    free(surname);
+    free(email);
+    free(phone_number);
+
+    return address;
 }
 
 void _display_address_safe(Address *address, const char *err_msg)

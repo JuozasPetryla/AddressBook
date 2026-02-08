@@ -7,6 +7,13 @@
 
 // LINKED LIST METHODS
 
+extern void llist_init(LList *llist)
+{
+    llist->head = NULL;
+    llist->tail = NULL;
+    llist->size = 0;
+}
+
 extern void llist_prepend(LList *llist, void *data) 
 {
     Node *node = create_node(data);
@@ -39,7 +46,7 @@ extern void llist_append(LList *llist, void *data)
 
 extern bool llist_insert(LList *llist, void *data, int pos)
 {
-    if (pos >= (int)llist->size || pos < 0) return false;
+    if (pos > (int)llist->size || pos < 0) return false;
 
     Node *prev = NULL;
     Node *curr = llist->head;
@@ -48,9 +55,9 @@ extern bool llist_insert(LList *llist, void *data, int pos)
         curr = curr->next;
     }
     
-    if (curr == llist->tail) {
+    if (prev == llist->tail || llist->head == NULL) {
         llist_append(llist, data);
-    } else if (curr == llist->head) {
+    } else if (prev == NULL) {
         llist_prepend(llist, data);
     } else {
         Node *node = create_node(data); 
@@ -148,7 +155,6 @@ extern bool llist_remove_all(LList *llist)
 extern LListIter* llist_iter_create(LList *llist)
 {
     LListIter *llist_iter = (LListIter*)malloc(sizeof(LListIter));
-    if (!llist_iter) return NULL;
 
     llist_iter->llist = llist;
     llist_iter->curr = llist->head;
