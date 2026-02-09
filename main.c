@@ -160,7 +160,7 @@ void find_address_by_pos()
 
 void find_address_by_str() 
 {
-    char *str = read_input_str("Input string to search the address by:");
+    char *str = read_input_str("Input string to search the address by:", 128);
 
     Address *address = (Address*)llist_find_str(llist, str);
     free(str);
@@ -214,10 +214,10 @@ Address* _read_address_from_input()
 {
     printf("Enter address\n");
 
-    char *name = read_input_str("Input name:");
-    char *surname = read_input_str("Input surname:");
-    char *email = read_input_str("Input email:");
-    char *phone_number = read_input_str("Input phone number:");
+    char *name = read_input_str("Input name:", 20);
+    char *surname = read_input_str("Input surname:", 20);
+    char *email = read_input_str("Input email:", 35);
+    char *phone_number = read_input_str("Input phone number:", 15);
 
     Address *address = address_create(name, surname, email, phone_number);
     

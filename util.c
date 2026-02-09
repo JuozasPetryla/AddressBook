@@ -5,21 +5,34 @@
 #include "util.h"
 #include "shared.h"
 
-#define MAX_LEN 128
+#define MAX_LEN
 
-extern char* read_input_str(const char *msg) 
+char* read_input_str(const char *msg, size_t max_len)
 {
-    char buf[MAX_LEN];
-
     printf("%s\n", msg);
-    scanf("%s", buf);
+
+    int c;
+    while ((c = getchar()) == '\n');
+    if (c != EOF) ungetc(c, stdin);
+
+    char *buf = (char*)malloc(max_len + 1);
+    if (!buf) return NULL;
+
+    if (!fgets(buf, max_len + 1, stdin)) {
+        free(buf);
+        return NULL;
+    }
 
     size_t len = strlen(buf);
-    char *str = (char*)malloc(len + 1);
 
-    memcpy(str, buf, len + 1);
+    if (len > 0 && buf[len - 1] != '\n') {
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    } else if (len > 0) {
+        buf[len - 1] = '\0';
+    }
 
-    return str;
+    return buf;
 }
 
 extern int read_input_int(const char *msg)
