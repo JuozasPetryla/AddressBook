@@ -37,6 +37,8 @@ void _handle_sigint(int sig);
 
 void _cleanup();
 
+void _print_llist_as_table(LList *_llist);
+
 void perform_selected_action(Action action);
 
 void display_all_addresses();
@@ -136,18 +138,7 @@ void append_address()
 
 void display_all_addresses() 
 {
-    fill_symbols(ADDRESS_BOOK_WIDTH, '-');
-    printf("| %20s | %20s | %35s | %15s |\n", "Name", "Surname", "Email", "Phone Number");
-    fill_symbols(ADDRESS_BOOK_WIDTH, '-');
-
-    LListIter *iter = llist_iter_create(llist);
-    while (llist_iter_condition(iter)) {
-        Address *address = (Address*) llist_iter_next(iter);
-        printf("| %20s | %20s | %35s | %15s |\n", address->name, address->surname, address->email, address->phone_number);
-    }
-    llist_iter_free(iter);
-
-    fill_symbols(ADDRESS_BOOK_WIDTH, '-');
+    _print_llist_as_table(llist);
 }
 
 void find_address_by_pos() 
@@ -162,9 +153,12 @@ void find_address_by_str()
 {
     char *str = read_input_str("Input string to search the address by:", 128);
 
-    Address *address = (Address*)llist_find_str(llist, str);
+    LList *llist_by_str = (LList*)llist_find_str(llist, str);
     free(str);
-    _display_address_safe(address, "Could not find address");
+    
+    if (!llist_by_str) return;
+
+    _print_llist_as_table(llist_by_str);
 }
 
 void remove_address()
@@ -185,6 +179,22 @@ void remove_all_addresses()
     } else {
         printf("Successfully removed all addresses from the book\n");
     }
+}
+
+void _print_llist_as_table(LList *_llist)
+{
+    fill_symbols(ADDRESS_BOOK_WIDTH, '-');
+    printf("| %20s | %20s | %35s | %15s |\n", "Name", "Surname", "Email", "Phone Number");
+    fill_symbols(ADDRESS_BOOK_WIDTH, '-');
+
+    LListIter *iter = llist_iter_create(_llist);
+    while (llist_iter_condition(iter)) {
+        Address *address = (Address*) llist_iter_next(iter);
+        printf("| %20s | %20s | %35s | %15s |\n", address->name, address->surname, address->email, address->phone_number);
+    }
+    llist_iter_free(iter);
+
+    fill_symbols(ADDRESS_BOOK_WIDTH, '-');
 }
 
 void _show_action_types()

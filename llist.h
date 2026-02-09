@@ -25,7 +25,7 @@ void llist_append(LList *llist, void *data);
 bool llist_insert(LList *llist, void *data, int pos);
 void* llist_remove(LList *llist, int pos);
 void* llist_find_pos(LList *llist, int pos);
-void* llist_find_str(LList *llist, const char* str);
+LList* llist_find_str(LList *llist, const char* str);
 
 // LINKED LIST ITERATOR METHODS
 LListIter* llist_iter_create(LList *llist);

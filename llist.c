@@ -81,16 +81,19 @@ extern void* llist_find_pos(LList *llist, int pos)
     return curr->data;
 }
 
-extern void* llist_find_str(LList *llist, const char* input_str)
+extern LList* llist_find_str(LList *llist, const char* input_str)
 {
+    LList *_llist = (LList*)malloc(sizeof(LList));
+    llist_init(_llist);
+
     Node *curr = llist->head;
     while (curr != NULL) {
         if (contains(curr->data, input_str)) {
-            return curr->data;
+            llist_append(_llist, curr->data);
         }
         curr = curr->next;
     }
-    return NULL;
+    return _llist;
 }
 
 extern void* llist_remove(LList *llist, int pos) 
