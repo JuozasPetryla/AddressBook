@@ -1,23 +1,24 @@
+TARGET_EXEC := main
+
 CC := gcc
 CFLAGS := -Wall -Wextra
 
-OBJDIR := build
-BINDIR := bin
+BUILD_DIR := ./build
 
-OBJS := $(OBJDIR)/main.o \
-        $(OBJDIR)/llist.o \
-        $(OBJDIR)/node.o \
-        $(OBJDIR)/address.o \
-        $(OBJDIR)/util.o
+SRC := $(wildcard *.c)
+OBJS := $(patsubst %.c,$(BUILD_DIR)/%.o,$(SRC))
 
-$(BINDIR)/main: $(OBJS) | $(BINDIR)
-	$(CC) $(OBJS) -o $@
+.PHONY: all clean
+all: $(BUILD_DIR)/$(TARGET_EXEC)
 
-$(OBJDIR)/%.o: %.c | $(OBJDIR)
+$(BUILD_DIR):
+	mkdir -p $@
+
+$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BINDIR):
-	mkdir -p $(BINDIR)
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS) | $(BUILD_DIR)
+	$(CC) $(OBJS) -o $@
 
-$(OBJDIR):
-	mkdir -p $(OBJDIR)
+clean:
+	rm -rf $(BUILD_DIR)
